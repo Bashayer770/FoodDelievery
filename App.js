@@ -7,16 +7,30 @@ import CategoryList from "./Components/CategoryList";
 import Restaurants from "./Components/Restaurants";
 import { NavigationContainer } from "@react-navigation/native";
 import RootNavigation from "./Navigation";
+import { useState } from "react";
 
 export default function App() {
   const queryClient = new QueryClient();
+  const [user, setUser] = useState(false);
+
+  const checkToken = async () => {
+    const token = await getToken();
+    if (token) {
+      setUser(true);
+    }
+  };
+
+  useEffect(() => {
+    checkToken();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
-      <NativeBaseProvider>
-        <NavigationContainer>
+      <NavigationContainer>
+        <NativeBaseProvider>
           <RootNavigation />
-        </NavigationContainer>
-      </NativeBaseProvider>
+        </NativeBaseProvider>
+      </NavigationContainer>
     </QueryClientProvider>
   );
 }
